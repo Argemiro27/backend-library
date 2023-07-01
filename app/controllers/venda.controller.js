@@ -1,44 +1,41 @@
 const db = require("../models");
-const Produto = db.produtos;
+const Venda = db.vendas;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
-  // Criando produtos
-  const produto = {
-    titulo: req.body.titulo,
-    descricao: req.body.descricao,
-    capa: req.body.capa,
-    autor: req.body.autor,
-    preco: req.body.preco,
-  };
-
-  console.log('Dados recebidos do frontend:', produto);
-
-  // Salvando no BD
-  Produto.create(produto)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      console.error('Erro ao criar o produto:', err);
-      res.status(500).send({
-        message: err.message || "Houve um erro ao criar o produto!"
-      });
-    });
-};
-
-  exports.findAll = (req, res) => {
-    const title = req.query.title;
-    var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
+    // Criando vendas
+    const venda = {
+      id_cliente: req.body.id_cliente,
+      valortotal: req.body.valortotal,
+      formapagamento: req.body.formapagamento,
+      numparcelas: req.body.numparcelas,
+    };
   
-    Produto.findAll({ where: condition })
+    // Salvando no BD
+    Venda.create(venda)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Erro ao procurar os produtos cadastrados!"
+            err.message || "Houve um erro ao criar a venda!"
+        });
+      });
+  };
+
+  exports.findAll = (req, res) => {
+    const title = req.query.title;
+    var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
+  
+    Venda.findAll({ where: condition })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Erro ao procurar as vendas cadastradas!"
         });
       });
   };
@@ -47,13 +44,13 @@ exports.create = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
   
-    Produto.findByPk(id)
+    Venda.findByPk(id)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
-          message: "Erro ao procurar produto de ID=" + id
+          message: "Erro ao procurar venda de ID=" + id
         });
       });
   };
@@ -61,23 +58,23 @@ exports.findOne = (req, res) => {
   exports.update = (req, res) => {
     const id = req.params.id;
   
-    Produto.update(req.body, {
+    Venda.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Produto atualizado com sucesso."
+            message: "Venda atualizada com sucesso."
           });
         } else {
           res.send({
-            message: `Não foi possível atualizar o produto de id=${id}! Produto não encontrado`
+            message: `Não foi possível atualizar a venda de id=${id}! Venda não encontrada`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Erro ao atualizar produto de ID=" + id
+          message: "Erro ao atualizar venda de ID=" + id
         });
       });
   };
@@ -85,39 +82,39 @@ exports.findOne = (req, res) => {
   exports.delete = (req, res) => {
     const id = req.params.id;
   
-    Produto.destroy({
+    Venda.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Produto deletado com sucesso!"
+            message: "Venda deletada com sucesso!"
           });
         } else {
           res.send({
-            message: `Não foi possível deletar o produto de ID=${id}. Produto não encontrado!`
+            message: `Não foi possível deletar o venda de ID=${id}. Venda não encontrada!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Não foi possível deletar o produto de ID=" + id
+          message: "Não foi possível deletar a venda de ID=" + id
         });
       });
   };
   
   exports.deleteAll = (req, res) => {
-    Produto.destroy({
+    Venda.destroy({
       where: {},
       truncate: false
     })
       .then(nums => {
-        res.send({ message: `${nums} Produtos deletados com sucesso!` });
+        res.send({ message: `${nums} Vendas deletadas com sucesso!` });
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Algum erro ocorreu ao tentar excluir os produtos."
+            err.message || "Algum erro ocorreu ao tentar excluir as vendas."
         });
       });
   };

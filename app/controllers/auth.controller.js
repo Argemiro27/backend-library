@@ -32,3 +32,4 @@ exports.login = (req, res) => {
       res.status(500).send({ message: "Erro ao autenticar usuário." });
     });
 };
+

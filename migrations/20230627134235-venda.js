@@ -1,28 +1,29 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('produtos', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('vendas', { // Corrigido para "Vendas" em maiúsculo
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
       },
-      titulo: {
+      id_cliente: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'clientes',
+          key: 'id'
+        }
+      },
+      valortotal: {
         type: Sequelize.STRING
       },
-      descricao: {
+      formapagamento: {
         type: Sequelize.STRING
       },
-      capa: {
-        type: Sequelize.STRING
-      },
-      autor: {
-        type: Sequelize.STRING
-      },
-      preco: {
+      numparcelas: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -36,7 +37,7 @@ module.exports = {
     });
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('produtos');
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('vendas'); 
   }
 };
